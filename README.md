@@ -25,11 +25,14 @@ There are some options multipart accepts
 const { router, response, methods} = require('octoris')
 const multipart = require('@octoris/multipart')
 
-function handler () {
+function uploadHandler (ctx) {
+  console.log(ctx.files) // => files array
+  console.log(ctx.body) // => fields for body
+
   return response.send(200, 'Okay!')
 }
 
-const home = router.route(['/'], [methods.GET(handler)])
+const home = router.route(['/'], [methods.POST(handler)])
 
 router.composeRoutes({}, [home], multipart({ uploadDir: './tmp' }))
 ```
