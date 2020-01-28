@@ -59,7 +59,7 @@ function multipart (options = {}) {
 
       bBoy.on('finish', () => {
         ctx.files = results
-        ctx.body = fieldResults
+        ctx.body = { ...ctx.body, ...fieldResults }
 
         return resolve(ctx)
       })
