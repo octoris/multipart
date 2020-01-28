@@ -4,7 +4,6 @@ const Busboy = require('busboy')
 
 function multipart (options = {}) {
   const opts = {
-    extensions: [],
     mimeTypes: [],
     maxSize: 5,
     ...options
