@@ -1,12 +1,14 @@
+const fs = require('fs')
+const path = require('path')
 const Busboy = require('busboy')
-const { withDefaults } = require('kyanite')
 
 function multipart (options = {}) {
-  const opts = withDefaults({
+  const opts = {
     extensions: [],
     mimeTypes: [],
-    maxSize: 5
-  }, options)
+    maxSize: 5,
+    ...options
+  }
 
   return function (ctx) {
     const results = []
@@ -15,8 +17,10 @@ function multipart (options = {}) {
     return new Promise ((resolve, reject) => {
       const bBoy = new Busboy({ headers: ctx.request.headers })
 
-      bBoy.on('file', (_, file, __, ___, mimetype) => {
-        if (!opts.mimeTypes.include(mimetype)) {
+      bBoy.on('file', (_, file, filename, ___, mimetype) => {
+        const fileResults = { filename, data: [] }
+
+        if (opts.mimeTypes.length && !opts.mimeTypes.includes(mimetype)) {
           return reject(new Error(`${mimetype} mimetype not accepted`))
         }
 
@@ -25,12 +29,33 @@ function multipart (options = {}) {
             return reject(new Error(`File size exceeds ${opts.maxSize}mb limit`))
           }
 
-          results.push(data)
+          fileResults.data.push(data)
+
+          if (opts.uploadDir) {
+            fs.writeFile(path.join(opts.uploadDir, filename), data, err => {
+              if (err) {
+                return reject(err)
+              }
+            })
+          }
+        })
+
+        file.on('end', () => {
+          results.push(fileResults)
         })
       })
 
       bBoy.on('field', (fieldName, val) => {
-        fieldResults[fieldName] = val
+        const field = fieldResults[fieldName]
+        const hasField = fieldResults.hasOwnProperty(fieldName)
+
+        if (hasField && Array.isArray(field)) {
+          fieldResults[fieldName] = [...field, val]
+        } else if (hasField) {
+          fieldResults[fieldName] = [field, val]
+        } else {
+          fieldResults[fieldName] = val
+        }
       })
 
       bBoy.on('finish', () => {

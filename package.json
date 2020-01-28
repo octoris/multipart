@@ -1,10 +1,10 @@
 {
   "name": "@octoris/multipart",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A multipart middleware for octoris",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape tests/index.js | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,11 @@
   },
   "homepage": "https://github.com/octoris/multipart#readme",
   "dependencies": {
-    "busboy": "0.3.1",
-    "kyanite": "^1.1.0"
+    "busboy": "0.3.1"
+  },
+  "devDependencies": {
+    "supertest": "4.0.2",
+    "tap-spec": "5.0.0",
+    "tape": "4.13.0"
   }
 }
