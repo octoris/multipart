@@ -16,7 +16,7 @@ function multipart (options = {}) {
     return new Promise ((resolve, reject) => {
       const bBoy = new Busboy({ headers: ctx.request.headers })
 
-      bBoy.on('file', (_, file, filename, ___, mimetype) => {
+      bBoy.on('file', (_, file, filename, __, mimetype) => {
         const fileResults = { filename, data: [] }
 
         if (opts.mimeTypes.length && !opts.mimeTypes.includes(mimetype)) {
