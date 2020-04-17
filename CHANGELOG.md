@@ -1,5 +1,9 @@
 # Multipart Changelog
 
+## v0.2.1
+
+- Updated dependencies
+
 ## v0.2.0
 
 - Multipart no longer overwrites the body, but instead uses the spread operator to insert itself into it
