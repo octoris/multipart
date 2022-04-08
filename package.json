@@ -1,6 +1,6 @@
 {
   "name": "@octoris/multipart",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A multipart middleware for octoris",
   "main": "index.js",
   "scripts": {
