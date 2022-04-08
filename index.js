@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const Busboy = require('busboy')
+const busboy = require('busboy')
 
 function multipart (options = {}) {
   const opts = {
@@ -14,9 +14,9 @@ function multipart (options = {}) {
     const fieldResults = {}
 
     return new Promise ((resolve, reject) => {
-      const bBoy = new Busboy({ headers: ctx.request.headers })
+      const bBoy = busboy({ headers: ctx.request.headers })
 
-      bBoy.on('file', (_, file, filename, __, mimetype) => {
+      bBoy.on('file', (_, file, { filename }, __, mimetype) => {
         const fileResults = { filename, data: [] }
 
         if (opts.mimeTypes.length && !opts.mimeTypes.includes(mimetype)) {
